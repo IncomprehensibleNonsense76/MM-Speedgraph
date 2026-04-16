@@ -1,8 +1,13 @@
-from collections import deque, defaultdict
+import heapq
+from collections import defaultdict
 from enums import Scene as S
 
 
-# Bidirectional loading zone connections between adjacent scenes
+DEFAULT_WEIGHT = 30   # seconds per scene transition
+TF_WEIGHT = 45        # Termina Field crossings
+SOS_COST = 15         # Song of Soaring warp
+
+# Bidirectional connections: (scene_a, scene_b) or (scene_a, scene_b, weight_override)
 EDGES = [
     # === Clock Town internal ===
     (S.SouthClockTown, S.NorthClockTown),
@@ -13,14 +18,13 @@ EDGES = [
     (S.NorthClockTown, S.EastClockTown),
     (S.NorthClockTown, S.CTGreatFairyFountain),
     (S.ClockTowerInterior, S.ClockTowerRooftop),
-
     (S.EastClockTown, S.Observatory),
 
     # === Clock Town <-> Overworld ===
     (S.SouthClockTown, S.TerminaField),
 
     # === Termina Field exits ===
-    (S.TerminaField, S.SouthernSwamp),
+    (S.TerminaField, S.SouthernSwamp, 180),
     (S.TerminaField, S.PathToMountainVillage),
     (S.TerminaField, S.GreatBayCoast),
     (S.TerminaField, S.MilkRoad),
@@ -31,8 +35,9 @@ EDGES = [
     (S.SouthernSwamp, S.Woodfall),
     (S.SouthernSwamp, S.WoodsOfMystery),
     (S.SouthernSwamp, S.HagsPotionShop),
-    (S.Woodfall, S.WoodfallTemple),
     (S.SouthernSwamp, S.SwampSpiderHouse),
+    # NOTE: Woodfall -> WFT edge is handled by dungeon room expansion
+    (S.DekuPrincessPrison, S.Woodfall),
 
     # === Mountain / Snowhead ===
     (S.PathToMountainVillage, S.MountainVillage),
@@ -68,11 +73,11 @@ EDGES = [
     (S.StoneTower, S.StoneTowerTemple),
 
     # === Special ===
-    (S.ClockTowerRooftop, S.TheMoon),
+    (S.ClockTowerRooftop, S.TheMoon, 600),
 ]
 
 
-# Scenes that have owl statues (activatable with human + sword)
+# Scenes that have owl statues
 OWL_SCENES = {
     S.SouthClockTown,
     S.SouthernSwamp,
@@ -87,50 +92,76 @@ OWL_SCENES = {
 }
 
 
+def _edge_weight(a, b, explicit=None):
+    if explicit is not None:
+        return explicit
+    if a == S.TerminaField or b == S.TerminaField:
+        return TF_WEIGHT
+    return DEFAULT_WEIGHT
+
+
 class World:
-    def __init__(self, edges=None):
+    def __init__(self, edges=None, dungeons=None):
         if edges is None:
             edges = EDGES
-        self.adj: dict[str, set[str]] = defaultdict(set)
-        for a, b in edges:
-            self.adj[a].add(b)
-            self.adj[b].add(a)
+        # adj[node][neighbor] = list of (weight, requires_frozenset_or_None)
+        self.adj: dict[str, dict[str, list[tuple[int, frozenset | None]]]] = defaultdict(
+            lambda: defaultdict(list)
+        )
+
+        # Add scene-level edges (bidirectional, no requirements)
+        for edge in edges:
+            a, b = edge[0], edge[1]
+            w = _edge_weight(a, b, edge[2] if len(edge) > 2 else None)
+            self.adj[a][b].append((w, None))
+            self.adj[b][a].append((w, None))
+
+        # Expand dungeon room graphs
+        if dungeons is None:
+            from dungeons import ALL_DUNGEONS, expand_dungeon
+            dungeons = ALL_DUNGEONS
+        for dungeon in dungeons:
+            from dungeons import expand_dungeon
+            room_edges, entry_node = expand_dungeon(dungeon)
+            for edge in room_edges:
+                a, b, w, req = edge
+                req_frozen = frozenset(req) if req else None
+                self.adj[a][b].append((w, req_frozen))
+
         self.nodes = set(self.adj.keys())
 
-    def bfs(self, start: str) -> dict[str, int]:
-        """BFS from start, returns {node: distance}."""
+    def dijkstra(self, start: str, acquired: frozenset[str] | None = None) -> dict[str, int]:
+        """Shortest path distances from start, respecting edge requirements."""
         dist = {start: 0}
-        queue = deque([start])
-        while queue:
-            node = queue.popleft()
-            for neighbor in self.adj[node]:
-                if neighbor not in dist:
-                    dist[neighbor] = dist[node] + 1
-                    queue.append(neighbor)
+        heap = [(0, start)]
+        while heap:
+            d, node = heapq.heappop(heap)
+            if d > dist.get(node, float("inf")):
+                continue
+            for neighbor, edge_options in self.adj[node].items():
+                for weight, req in edge_options:
+                    if req and (acquired is None or not req <= acquired):
+                        continue
+                    nd = d + weight
+                    if nd < dist.get(neighbor, float("inf")):
+                        dist[neighbor] = nd
+                        heapq.heappush(heap, (nd, neighbor))
         return dist
 
-    def distance(self, a: str, b: str) -> int | None:
-        """Shortest path length from a to b, or None if unreachable."""
+    def distance(self, a: str, b: str, acquired: frozenset[str] | None = None) -> int | None:
         if a == b:
             return 0
-        return self.bfs(a).get(b)
+        return self.dijkstra(a, acquired).get(b)
 
-    def all_pairs(self) -> dict[tuple[str, str], int]:
-        """All-pairs shortest path distances."""
-        result = {}
-        for node in self.nodes:
-            for dest, d in self.bfs(node).items():
-                result[(node, dest)] = d
-        return result
-
-    def path(self, start: str, end: str) -> list[str] | None:
-        """Return the actual shortest path as a list of scene names."""
+    def path(self, start: str, end: str, acquired: frozenset[str] | None = None) -> list[str] | None:
+        """Shortest weighted path respecting requirements."""
         if start == end:
             return [start]
+        dist = {start: 0}
         prev = {start: None}
-        queue = deque([start])
-        while queue:
-            node = queue.popleft()
+        heap = [(0, start)]
+        while heap:
+            d, node = heapq.heappop(heap)
             if node == end:
                 result = []
                 cur = end
@@ -138,8 +169,15 @@ class World:
                     result.append(cur)
                     cur = prev[cur]
                 return list(reversed(result))
-            for neighbor in self.adj[node]:
-                if neighbor not in prev:
-                    prev[neighbor] = node
-                    queue.append(neighbor)
+            if d > dist.get(node, float("inf")):
+                continue
+            for neighbor, edge_options in self.adj[node].items():
+                for weight, req in edge_options:
+                    if req and (acquired is None or not req <= acquired):
+                        continue
+                    nd = d + weight
+                    if nd < dist.get(neighbor, float("inf")):
+                        dist[neighbor] = nd
+                        prev[neighbor] = node
+                        heapq.heappush(heap, (nd, neighbor))
         return None

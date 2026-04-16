@@ -1,7 +1,7 @@
-from collections import deque, defaultdict
+from collections import deque
 from model import Check
 from enums import Scene as S, Masks as M, Songs, TimeSlot as T
-from world import World, OWL_SCENES
+from world import World, OWL_SCENES, SOS_COST
 
 
 def _find_needed(checks: dict[str, Check], goals: list[str]) -> set[str]:
@@ -21,33 +21,34 @@ def _find_needed(checks: dict[str, Check], goals: list[str]) -> set[str]:
 
 
 def _best_sos(
-    current: str, dest: str, activated_owls: set[str], dist: dict
+    current: str, dest: str, activated_owls: set[str],
+    world: World, acquired_frozen: frozenset[str],
 ) -> tuple[int, str | None]:
-    """Find cheapest SOS warp: cost 1 to an owl, then walk to dest."""
+    """Find cheapest SOS warp to reach dest. Returns (cost_seconds, owl_scene)."""
     best_cost = float("inf")
     best_owl = None
     for owl in activated_owls:
-        walk_from_owl = dist.get((owl, dest), float("inf"))
-        total = 1 + walk_from_owl
+        walk_from_owl = world.dijkstra(owl, acquired_frozen).get(dest, float("inf"))
+        total = SOS_COST + walk_from_owl
         if total < best_cost:
             best_cost = total
             best_owl = owl
     return best_cost, best_owl
 
 
-def _travel(current, dest, has_sos, activated_owls, dist, world):
-    """Compute best travel option: walk, SOS, or SoT+walk. Returns (cost, path, method)."""
+def _travel(current, dest, has_sos, activated_owls, world, acquired_frozen):
+    """Best travel option (walk or SOS). Returns (cost_seconds, path, method)."""
     if current == dest:
         return 0, [current], "stay"
 
-    walk_cost = dist.get((current, dest), float("inf"))
-    walk_path = world.path(current, dest) or [current]
+    walk_cost = world.dijkstra(current, acquired_frozen).get(dest, float("inf"))
+    walk_path = world.path(current, dest, acquired_frozen) or [current]
     best_cost, best_path, method = walk_cost, walk_path, "walk"
 
     if has_sos and activated_owls:
-        sos_cost, sos_owl = _best_sos(current, dest, activated_owls, dist)
+        sos_cost, sos_owl = _best_sos(current, dest, activated_owls, world, acquired_frozen)
         if sos_cost < best_cost:
-            walk_seg = world.path(sos_owl, dest)
+            walk_seg = world.path(sos_owl, dest, acquired_frozen)
             if walk_seg and len(walk_seg) > 1:
                 best_path = ["~SOS~"] + walk_seg
             else:
@@ -58,21 +59,37 @@ def _travel(current, dest, has_sos, activated_owls, dist, world):
     return best_cost, best_path, method
 
 
+def _fmt_time(seconds: int) -> str:
+    if seconds < 60:
+        return f"{seconds}s"
+    m, s = divmod(seconds, 60)
+    if s == 0:
+        return f"{m}m"
+    return f"{m}m {s}s"
+
+
+def _parent_scene(node: str) -> str:
+    """Extract parent scene from a room node like 'Woodfall Temple:Room5'."""
+    return node.rsplit(":", 1)[0] if ":" in node else node
+
+
 # =============================================================================
 # Cycle-aware solver
 # =============================================================================
 
 class CycleRoute:
-    """Result of one 3-day cycle."""
     def __init__(self, cycle_num):
         self.cycle_num = cycle_num
-        self.steps: list[tuple[Check, int, list[str]]] = []  # (check, cost, path)
+        self.steps: list[tuple[Check, int, list[str]]] = []
         self.total_cost = 0
-        self.time = T.DAY_1
 
     def add(self, check, cost, path):
         self.steps.append((check, cost, path))
         self.total_cost += cost
+
+
+def _total_cost(cycles: list[CycleRoute]) -> int:
+    return sum(c.total_cost for c in cycles)
 
 
 def solve_route_cycles(
@@ -80,13 +97,22 @@ def solve_route_cycles(
     goals: list[str],
     world: World,
 ) -> list[CycleRoute]:
-    """Greedy nearest-available solver with cycle + time slot support.
+    """Greedy solver with automatic A/B test for Song of Soaring."""
+    route_a = _solve_route_cycles(checks, goals, world)
+    if Songs.Soaring not in _find_needed(checks, goals):
+        goals_with_sos = list(goals) + [Songs.Soaring]
+        route_b = _solve_route_cycles(checks, goals_with_sos, world)
+        if _total_cost(route_b) < _total_cost(route_a):
+            return route_b
+    return route_a
 
-    Plans across multiple 3-day cycles. Song of Time resets position
-    to Clock Tower Interior, Day 1. Items persist across cycles.
-    """
+
+def _solve_route_cycles(
+    checks: dict[str, Check],
+    goals: list[str],
+    world: World,
+) -> list[CycleRoute]:
     needed = _find_needed(checks, goals)
-    dist = world.all_pairs()
 
     acquired: set[str] = set()
     activated_owls: set[str] = set()
@@ -99,12 +125,11 @@ def solve_route_cycles(
         current = S.ClockTowerInterior
         current_time = T.DAY_1
 
-        # Try to fill this cycle with checks
         made_progress = True
         while made_progress:
             made_progress = False
+            acquired_frozen = frozenset(acquired)
 
-            # Find checks available right now
             available = []
             for cid in needed:
                 if cid in acquired:
@@ -120,116 +145,59 @@ def solve_route_cycles(
             if not available:
                 break
 
-            # Pick nearest available, preferring checks at current time slot
+            # Cache dijkstra from current position
+            dist_from_current = world.dijkstra(current, acquired_frozen)
+
             def score(cid):
                 c = checks[cid]
-                dest = c.scene
-                cost, _, _ = _travel(current, dest, has_sos, activated_owls, dist, world)
+                travel_secs = dist_from_current.get(c.scene, float("inf"))
 
-                # Prefer checks at current time over future time
+                # Also check SOS options
+                if has_sos and activated_owls:
+                    sos_cost, _ = _best_sos(current, c.scene, activated_owls, world, acquired_frozen)
+                    travel_secs = min(travel_secs, sos_cost)
+
                 if c.time is not None:
                     earliest = min(t for t in c.time if t >= current_time)
                     time_wait = earliest - current_time
                 else:
                     time_wait = 0
 
-                # Weight: travel cost + time slots we'd have to skip
-                return (time_wait, cost)
+                return (time_wait, travel_secs + c.duration)
 
             best_id = min(available, key=score)
             best = checks[best_id]
 
-            # Advance time if needed
             if best.time is not None:
                 earliest_valid = min(t for t in best.time if t >= current_time)
                 current_time = earliest_valid
 
-            # Travel
-            cost, path, _ = _travel(current, best.scene, has_sos, activated_owls, dist, world)
+            travel_secs, path, _ = _travel(current, best.scene, has_sos, activated_owls, world, acquired_frozen)
+            total_secs = travel_secs + best.duration
 
-            cycle.add(best, cost, path)
-            current = best.scene
+            cycle.add(best, total_secs, path)
+
+            current = best.warp_to if best.warp_to else best.scene
             acquired.add(best_id)
             made_progress = True
 
-            # Track SOS / owl state
             if best_id == Songs.Soaring:
                 has_sos = True
             if best_id == M.Deku:
                 can_activate = True
             if can_activate:
                 for scene in path:
-                    if scene in OWL_SCENES:
-                        activated_owls.add(scene)
+                    if scene in OWL_SCENES or _parent_scene(scene) in OWL_SCENES:
+                        activated_owls.add(_parent_scene(scene))
+                if best.warp_to:
+                    ps = _parent_scene(best.warp_to)
+                    if ps in OWL_SCENES:
+                        activated_owls.add(ps)
 
         cycles.append(cycle)
 
-        # Safety: if cycle made no progress, we're stuck
         if not cycle.steps:
             missing = needed - acquired
             raise ValueError(f"Stuck! No checks possible. Missing: {missing}")
 
     return cycles
-
-
-# =============================================================================
-# Legacy single-route solver (no time tracking)
-# =============================================================================
-
-def solve_route(
-    checks: dict[str, Check],
-    goals: list[str],
-    world: World,
-    start: str = S.ClockTowerInterior,
-) -> tuple[list[tuple[Check, int, list[str]]], int]:
-    """Greedy nearest-available solver (ignores time constraints)."""
-    needed = _find_needed(checks, goals)
-    dist = world.all_pairs()
-
-    acquired: set[str] = set()
-    activated_owls: set[str] = set()
-    route: list[tuple[Check, int, list[str]]] = []
-    current = start
-    total_cost = 0
-
-    has_sos = False
-    can_activate = False
-
-    while acquired != needed:
-        available = [
-            cid
-            for cid in needed
-            if cid not in acquired and checks[cid].requires <= acquired
-        ]
-
-        if not available:
-            missing = needed - acquired
-            raise ValueError(f"Stuck! No available checks. Missing: {missing}")
-
-        def travel_cost(cid):
-            dest = checks[cid].scene
-            walk = dist.get((current, dest), float("inf"))
-            if has_sos and activated_owls:
-                sos_cost, _ = _best_sos(current, dest, activated_owls, dist)
-                return min(walk, sos_cost)
-            return walk
-
-        best_id = min(available, key=travel_cost)
-        best = checks[best_id]
-        cost, path, _ = _travel(current, best.scene, has_sos, activated_owls, dist, world)
-
-        total_cost += cost
-        current = best.scene
-        acquired.add(best_id)
-        route.append((best, cost, path))
-
-        if best_id == Songs.Soaring:
-            has_sos = True
-        if best_id == M.Deku:
-            can_activate = True
-        if can_activate:
-            for scene in path:
-                if scene in OWL_SCENES:
-                    activated_owls.add(scene)
-
-    return route, total_cost

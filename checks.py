@@ -1,5 +1,6 @@
 from model import Check
 from enums import Scene as S, Items as I, Songs, Masks as M, Remains as R, Events as E, TimeSlot as T
+from dungeons import room_node, small_key, WFT_SK1
 
 CHECKS: dict[str, Check] = {}
 
@@ -16,8 +17,8 @@ ANY_NIGHT = frozenset({T.NIGHT_1, T.NIGHT_2, T.NIGHT_3})
 D1_D2 = frozenset({T.DAY_1, T.DAY_2})
 
 
-def check(id, scene, requires=None, time=N):
-    c = Check(id, scene, requires or set(), time)
+def check(id, scene, requires=None, time=N, duration=0, warp_to=None):
+    c = Check(id, scene, requires or set(), time, duration, warp_to)
     CHECKS[id] = c
     return c
 
@@ -67,25 +68,31 @@ check(I.BottleBeaver,    S.ZoraCape,              {M.Zora, I.Hookshot})
 # =====================
 check(I.MagicBeans,      S.DekuPalace)
 check(Songs.Sonata,      S.DekuPalace,            {M.Deku})
-check(I.Bow,             S.WoodfallTemple,        {Songs.Sonata, M.Deku, I.Magic})
-check(I.BossKeyWFT,      S.WoodfallTemple,        {I.Bow})
-check(R.Odolwa,          S.WoodfallTemple,        {I.BossKeyWFT})
-check(Songs.OathToOrder, S.WoodfallTemple,        {R.Odolwa})
-check(M.Scents,          S.DekuPalace,            {R.Odolwa})
-check(M.Truth,           S.SwampSpiderHouse,      {M.Deku, I.Bow, I.BombBag})
+# WFT room-level checks
+_WFT = S.WoodfallTemple
+check(WFT_SK1,     room_node(_WFT, 5),      {Songs.Sonata, M.Deku, I.Magic})  # small key in Room 5
+check(I.Bow,             room_node(_WFT, 7),      {WFT_SK1})                  # bow in Room 7, key unlocks path
+check(I.BossKeyWFT,      room_node(_WFT, 8),      {I.Bow})                          # frog fight in Room 8
+check(R.Odolwa,          room_node(_WFT, "Boss"),  {I.BossKeyWFT},
+      duration=180, warp_to=S.DekuPrincessPrison)                                    # 3 min: boss -> GC -> prison
+check(Songs.OathToOrder, S.DekuPrincessPrison,     {R.Odolwa})                        # learned in GC during boss CS
+# Deku Princess: catch in bottle at prison after Odolwa, release in king's chamber as Deku
+check(I.DekuPrincess,    S.DekuPrincessPrison,    {R.Odolwa, I.Bottle})              # need empty bottle
+check(M.Scents,          S.DekuPalace,            {I.DekuPrincess, M.Deku})           # release princess -> butler race
+check(M.Truth,           S.SwampSpiderHouse,      {M.Deku, I.Bottle, I.Bow})   # need bow (or stick) to enter, all 30 skulltulas
 check(I.SpinAttack,      S.Woodfall,              {R.Odolwa})
 
 # =====================
 # === MOUNTAIN / SNOWHEAD
 # =====================
 check(I.LensOfTruth,     S.LonePeakShrine,        {I.Magic, I.Bow, I.BombBag})
-check(M.Goron,           S.MountainVillage,        {I.LensOfTruth, Songs.Healing})
+check(M.Goron,           S.MountainVillage,        {I.LensOfTruth, Songs.Healing}, duration=90)  # 90s cutscene
 check(M.DonGero,         S.MountainVillage,        {M.Goron})
 check(Songs.LullabyIntro,S.GoronVillage,           {M.Goron})
 check(Songs.Lullaby,     S.GoronShrine,            {Songs.LullabyIntro, M.Goron})
 check(I.FireArrows,      S.SnowheadTemple,         {Songs.Lullaby, M.Goron, I.Magic})
 check(I.BossKeySHT,      S.SnowheadTemple,         {I.FireArrows})
-check(R.Goht,            S.SnowheadTemple,         {I.BossKeySHT})
+check(R.Goht,            S.SnowheadTemple,         {I.BossKeySHT},          duration=120, warp_to=S.MountainVillage)  # 2 min: boss -> GC -> mtn village
 check(I.DoubleMagic,     S.Snowhead,               {R.Goht})
 check(I.RazorSword,      S.MountainVillage,        {I.FireArrows})
 check(I.GildedSword,     S.MountainVillage,        {I.RazorSword, I.GoldDust})
@@ -101,12 +108,12 @@ check(M.Romani,          S.RomaniRanch,            {I.BottleAliens},        N2) 
 # =====================
 # === GREAT BAY
 # =====================
-check(M.Zora,            S.GreatBayCoast,          {Songs.Healing, I.Epona})
+check(M.Zora,            S.GreatBayCoast,          {Songs.Healing, I.Epona}, duration=90)  # 90s cutscene
 check(I.Hookshot,        S.PiratesFortress,        {M.Zora})
 check(Songs.NewWave,     S.MarineResearchLab,      {M.Zora, I.Hookshot, I.Bottle, I.BottleAliens, I.BottleGoldDust})
 check(I.IceArrows,       S.GreatBayTemple,         {Songs.NewWave, M.Zora})
 check(I.BossKeyGBT,      S.GreatBayTemple,         {I.IceArrows})
-check(R.Gyorg,           S.GreatBayTemple,         {I.BossKeyGBT})
+check(R.Gyorg,           S.GreatBayTemple,         {I.BossKeyGBT},          duration=120, warp_to=S.ZoraCape)  # 2 min: boss -> GC -> zora cape
 check(I.EnhancedDefense, S.ZoraCape,               {R.Gyorg})
 check(I.GiantWallet,     S.OceanSpiderHouse,       {I.Epona},               D1)  # must be Day 1
 
@@ -123,7 +130,7 @@ check(Songs.Elegy,       S.IkanaCastle,            {I.MirrorShield, I.PowderKeg}
 check(I.LightArrows,     S.StoneTowerTemple,       {Songs.Elegy, M.Goron, M.Zora, M.Deku})
 check(M.Giant,           S.StoneTowerTemple,       {I.LightArrows})
 check(I.BossKeySTT,      S.StoneTowerTemple,       {I.LightArrows})
-check(R.Twinmold,        S.StoneTowerTemple,       {I.BossKeySTT, M.Giant})
+check(R.Twinmold,        S.StoneTowerTemple,       {I.BossKeySTT, M.Giant}, duration=120, warp_to=S.IkanaCanyon)  # 2 min: boss -> GC -> ikana canyon
 check(I.GreatFairySword, S.IkanaCanyon,            {R.Twinmold})
 
 # =====================
@@ -135,7 +142,7 @@ check(M.CircusLeader,    S.EastClockTown,          {M.Romani, M.Deku, M.Goron, M
 # === MOON
 # =====================
 check(E.EnterMoon,       S.ClockTowerRooftop,
-      {R.Odolwa, R.Goht, R.Gyorg, R.Twinmold, Songs.OathToOrder, Songs.Soaring}, N3)
+      {R.Odolwa, R.Goht, R.Gyorg, R.Twinmold, Songs.OathToOrder, I.Ocarina}, N3)
 check(E.KillMajora,      S.TheMoon,               {E.EnterMoon})
 
 # =====================

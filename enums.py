@@ -42,6 +42,7 @@ class Scene(LabeledEnum):
     WoodfallTemple       = ("Woodfall Temple",)
     WoodsOfMystery       = ("Woods of Mystery",)
     HagsPotionShop       = ("Hags Potion Shop",)
+    DekuPrincessPrison   = ("Deku Princess Prison",)
     SwampSpiderHouse     = ("Swamp Spider House",)
 
     # === Mountain / Snowhead ===
@@ -80,6 +81,7 @@ class Scene(LabeledEnum):
     StoneTowerTemple     = ("Stone Tower Temple",)
 
     # === Special ===
+    GiantsChamber        = ("Giants' Chamber",)
     TheMoon              = ("The Moon",)
 
 
@@ -119,7 +121,10 @@ class Items(LabeledEnum):
     # === Bottles (additional) ===
     BottleGraveyard = ("bottle_graveyard",   "Bottle (Graveyard)")
     BottleBeaver    = ("bottle_beaver",      "Bottle (Beaver Race)")
-    BottleMadameAroma = ("bottle_madame_aroma", "Bottle (Madame Aroma)")  # Kafei quest
+    BottleMadameAroma = ("bottle_madame_aroma", "Bottle (Madame Aroma)")
+
+    # === Bottle contents ===
+    DekuPrincess    = ("deku_princess",      "Deku Princess (Bottle)")  # Kafei quest
 
     # === Key Items ===
     BombersNotebook = ("bombers_notebook",   "Bombers' Notebook")
