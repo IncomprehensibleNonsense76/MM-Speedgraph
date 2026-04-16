@@ -1,0 +1,6 @@
+[submodule "kz"]
+	path = kz
+	url = https://github.com/krimtonz/kz.git
+[submodule "mm"]
+	path = mm
+	url = https://github.com/zeldaret/mm.git
