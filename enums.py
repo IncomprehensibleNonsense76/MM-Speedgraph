@@ -1,4 +1,14 @@
-from enum import StrEnum
+from enum import IntEnum, StrEnum
+
+
+class TimeSlot(IntEnum):
+    """Phases within a 3-day cycle. Checks with time constraints must be done during one of their allowed slots."""
+    DAY_1 = 0
+    NIGHT_1 = 1
+    DAY_2 = 2
+    NIGHT_2 = 3
+    DAY_3 = 4
+    NIGHT_3 = 5
 
 
 class LabeledEnum(StrEnum):

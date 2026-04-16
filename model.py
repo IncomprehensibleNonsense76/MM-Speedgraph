@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from enums import LabeledEnum
+from enums import LabeledEnum, TimeSlot
 
 
 @dataclass
@@ -8,6 +8,7 @@ class Check:
     id: LabeledEnum
     scene: str
     requires: set[str] = field(default_factory=set)
+    time: frozenset[TimeSlot] | None = None  # None = any time in the cycle
 
     @property
     def name(self) -> str:
