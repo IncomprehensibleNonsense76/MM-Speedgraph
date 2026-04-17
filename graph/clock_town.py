@@ -48,5 +48,7 @@ def register(graph: GameGraph):
     graph.connect(Scene.SouthClockTown, Scene.ClockTowerInterior, walk)
     graph.connect(Scene.NorthClockTown, Scene.EastClockTown, walk)
     graph.connect(Scene.NorthClockTown, Scene.CTGreatFairyFountain, walk)
-    graph.connect(Scene.ClockTowerInterior, Scene.ClockTowerRooftop, walk)
+    # Clock Tower Rooftop: accessed from SCT at midnight Night 3, one-way (exits: SoT or Oath)
+    graph.connect(Scene.SouthClockTown, Scene.ClockTowerRooftop,
+                  Strat("Midnight Climb", cost=30, oneway=True))
     graph.connect(Scene.EastClockTown, Scene.Observatory, walk)

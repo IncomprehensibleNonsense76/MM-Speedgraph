@@ -17,7 +17,8 @@ def register(graph: GameGraph):
     graph.node(Scene.Snowhead, owl_statue=True)
 
     # === Checks ===
-    graph.node(Scene.LonePeakShrine).check(Items.LensOfTruth, requires={Items.Magic})
+    graph.node(Scene.LonePeakShrine).check(
+        Items.LensOfTruth, requires={Items.Magic, Items.Bow, Items.BombBag})  # bow+bombs to reach mtn village
     graph.node(Scene.MountainVillage).check(
         Masks.Goron, requires={Items.LensOfTruth, Songs.Healing}, duration=90)
     graph.node(Scene.MountainVillage).check(Masks.DonGero, requires={Masks.Goron})

@@ -193,7 +193,9 @@ def _solve(
             acquired_frozen = frozenset(acquired)
 
             # Find checks available right now (deps met + time valid)
-            available = []
+            # Split checks into "available now" and "available later"
+            now = []
+            earliest_future: int | None = None
             for cid in needed:
                 if cid in acquired:
                     continue
@@ -201,45 +203,38 @@ def _solve(
                 if not check.requires <= acquired:
                     continue
                 if check.time is None:
-                    available.append(cid)
-                elif any(t >= current_time for t in check.time):
-                    available.append(cid)
-
-            if not available:
-                break
+                    now.append(cid)  # no time constraint = available any time
+                elif current_time in check.time:
+                    now.append(cid)  # time matches current slot
+                else:
+                    # Future check — track earliest available slot
+                    future_slots = [t for t in check.time if t > current_time]
+                    if future_slots:
+                        ft = min(future_slots)
+                        if earliest_future is None or ft < earliest_future:
+                            earliest_future = ft
 
             # Cache dijkstra from current position
             dist_from_current = graph.dijkstra(current, acquired_frozen)
 
-            # Filter to physically reachable (walk, SOS owl, or SOS dungeon entrance)
-            reachable = []
+            # Filter to physically reachable
             can_sos = has_sos and (activated_owls or ":" in current)
-            for cid in available:
+            available = []
+            for cid in now:
                 _, node_id = all_checks[cid]
                 cost = dist_from_current.get(node_id, float("inf"))
                 if can_sos:
                     sos_cost, _ = _best_sos(current, node_id, has_sos, activated_owls, graph, acquired_frozen)
                     cost = min(cost, sos_cost)
                 if cost < float("inf"):
-                    reachable.append(cid)
-            available = reachable
+                    available.append(cid)
 
             if not available:
-                # No reachable checks right now — try advancing time
-                future = []
-                for cid in needed:
-                    if cid in acquired:
-                        continue
-                    check, node_id = all_checks[cid]
-                    if not check.requires <= acquired:
-                        continue
-                    if check.time and all(t < current_time for t in check.time):
-                        continue  # already past this time slot
-                    if check.time and any(t > current_time for t in check.time):
-                        future.append(min(t for t in check.time if t > current_time))
-                if future:
-                    current_time = min(future)
-                    continue  # retry with advanced time
+                # Nothing reachable right now — advance time if future checks exist
+                if earliest_future is not None:
+                    current_time = TimeSlot(earliest_future)
+                    made_progress = True  # time advancing counts as progress
+                    continue
                 break
 
             # Score: prefer current time slot, then nearest
@@ -282,7 +277,7 @@ def _solve(
                 has_sos = True
             if best_id == Masks.Deku:
                 can_activate = True
-            if can_activate:
+            if can_activate or Masks.Deku in acquired:
                 for scene in path:
                     ps = _parent_scene(scene)
                     if ps in owl_nodes:
