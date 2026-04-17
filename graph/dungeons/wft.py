@@ -19,6 +19,7 @@ Boss:    Odolwa arena
 from __future__ import annotations
 from core import GameGraph, Strat, Technique, Ruleset
 from enums import Scene, Items, Masks, Remains
+from route_solver import _register_dungeon_entry
 
 
 def _room(num: int | str) -> str:
@@ -46,6 +47,7 @@ def register(graph: GameGraph):
         duration=180, warp_to=Scene.DekuPrincessPrison)
 
     # === Overworld connection ===
+    _register_dungeon_entry(Scene.WoodfallTemple, _room(2))
     graph.connect(Scene.Woodfall, _room(2), Strat("Enter WFT", cost=30))
 
     # === Room traversals ===
@@ -76,6 +78,10 @@ def register(graph: GameGraph):
     graph.connect(_room(10), _room("1F"),
                   Strat("Deku Flight", cost=30, oneway=True,
                         requires=frozenset({Masks.Deku})))
+
+    # Drop down from upper hub to lower hub
+    graph.connect(_room("1F"), _room(1),
+                  Strat("Drop Down", cost=5, oneway=True))
 
     # Upper path
     graph.connect(_room("1F"), _room("5F"), Strat("Walk", cost=15))
