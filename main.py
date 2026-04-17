@@ -6,9 +6,12 @@ from world import World
 import goals
 
 TIME_NAMES = {
-    T.DAY_1: "Day 1", T.NIGHT_1: "Night 1",
-    T.DAY_2: "Day 2", T.NIGHT_2: "Night 2",
-    T.DAY_3: "Day 3", T.NIGHT_3: "Night 3",
+    T.DAY_1: "Day 1",
+    T.NIGHT_1: "Night 1",
+    T.DAY_2: "Day 2",
+    T.NIGHT_2: "Night 2",
+    T.DAY_3: "Day 3",
+    T.NIGHT_3: "Night 3",
 }
 
 GOAL_SETS = {
@@ -69,7 +72,9 @@ def print_cycle_route(goal_name, cycles):
 
     print(f"\n{'=' * 60}")
     m, s = divmod(total_time, 60)
-    print(f"  {total_checks} checks | {len(cycles)} cycles | {_fmt_time(total_time)} ({total_time}s) | {total_sos} SOS")
+    print(
+        f"  {total_checks} checks | {len(cycles)} cycles | {_fmt_time(total_time)} ({total_time}s) | {total_sos} SOS"
+    )
 
 
 def main():

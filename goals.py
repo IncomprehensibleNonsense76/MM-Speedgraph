@@ -11,7 +11,9 @@ ALL_BOTTLES = [
     I.BottleMadameAroma,
 ]
 
-ALL_MASKS = [M.FierceDeity]  # transitively requires all 20 non-transformation masks + Moon
+ALL_MASKS = [
+    M.FierceDeity
+]  # transitively requires all 20 non-transformation masks + Moon
 
 ALL_REMAINS = [E.KillMajora]  # same as Any% for now
 

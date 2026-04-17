@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 """Room-level graph data for dungeons.
 
 Edge format: (from_room, to_room, strats, bidirectional)
@@ -65,31 +67,31 @@ WOODFALL_TEMPLE = {
     "edges": [
         # Entrance to hub
         (2, 1, [(20, {M.Deku}), (10, {I.Hookshot})]),
-
         # Right side (lower)
         (1, 5, 15),
-        (5, 6, (20, {M.Deku})),                 # lower path to turtles
-
+        (5, 6, (20, {M.Deku})),  # lower path to turtles
         # Left side (locked door from hub)
-        (1, 3, (15, {WFT_SK1})),           # needs small key from Room 5
-        (3, 4, (20, {I.BombBag})),               # compass room, light torch
-        (3, 9, 20),                              # dark room
-        (9, 10, 20),                             # up to top room
-
+        (1, 3, (15, {WFT_SK1})),  # needs small key from Room 5
+        (3, 4, (20, {I.BombBag})),  # compass room, light torch
+        (3, 9, 20),  # dark room
+        (9, 10, 20),  # up to top room
         # JS recoil shortcut (one-way)
         # One-way: Room 10 to upper hub
-        (10, "1F", [(10, {M.Deku, I.Bow}),       # JS recoil (fast, needs weapon)
-                     (30, {M.Deku})],             # vanilla deku flight (slow, no weapon)
-         False),
-
+        (
+            10,
+            "1F",
+            [
+                (10, {M.Deku, I.Bow}),  # JS recoil (fast, needs weapon)
+                (30, {M.Deku}),
+            ],  # vanilla deku flight (slow, no weapon)
+            False,
+        ),
         # Upper path
-        ("1F", "5F", 15),                        # upper hub to upper right side
-        ("5F", 7, 15),                           # to bow room
-        (7, 8, (25, {I.Bow})),                   # eye switch to frog fight
-
+        ("1F", "5F", 15),  # upper hub to upper right side
+        ("5F", 7, 15),  # to bow room
+        (7, 8, (25, {I.Bow})),  # eye switch to frog fight
         # Pre-boss (light torch in hub with arrow)
         (1, 0, [(20, {I.Bow}), (20, {I.FireArrows})]),
-
         # Boss door — same connection, different strats
         (0, "Boss", [(15, {I.Hookshot}), (45, {M.Deku, I.Bow})]),
     ],

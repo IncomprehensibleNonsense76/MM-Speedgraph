@@ -1,3 +1,4 @@
+from __future__ import annotations
 from collections import deque
 from model import Check
 from enums import Scene as S, Masks as M, Songs, TimeSlot as T
@@ -21,8 +22,11 @@ def _find_needed(checks: dict[str, Check], goals: list[str]) -> set[str]:
 
 
 def _best_sos(
-    current: str, dest: str, activated_owls: set[str],
-    world: World, acquired_frozen: frozenset[str],
+    current: str,
+    dest: str,
+    activated_owls: set[str],
+    world: World,
+    acquired_frozen: frozenset[str],
 ) -> tuple[int, str | None]:
     """Find cheapest SOS warp to reach dest. Returns (cost_seconds, owl_scene)."""
     best_cost = float("inf")
@@ -46,7 +50,9 @@ def _travel(current, dest, has_sos, activated_owls, world, acquired_frozen):
     best_cost, best_path, method = walk_cost, walk_path, "walk"
 
     if has_sos and activated_owls:
-        sos_cost, sos_owl = _best_sos(current, dest, activated_owls, world, acquired_frozen)
+        sos_cost, sos_owl = _best_sos(
+            current, dest, activated_owls, world, acquired_frozen
+        )
         if sos_cost < best_cost:
             walk_seg = world.path(sos_owl, dest, acquired_frozen)
             if walk_seg and len(walk_seg) > 1:
@@ -76,6 +82,7 @@ def _parent_scene(node: str) -> str:
 # =============================================================================
 # Cycle-aware solver
 # =============================================================================
+
 
 class CycleRoute:
     def __init__(self, cycle_num):
@@ -148,13 +155,32 @@ def _solve_route_cycles(
             # Cache dijkstra from current position
             dist_from_current = world.dijkstra(current, acquired_frozen)
 
+            # Filter out physically unreachable checks
+            reachable = []
+            for cid in available:
+                dest = checks[cid].scene
+                cost = dist_from_current.get(dest, float("inf"))
+                if has_sos and activated_owls:
+                    sos_cost, _ = _best_sos(
+                        current, dest, activated_owls, world, acquired_frozen
+                    )
+                    cost = min(cost, sos_cost)
+                if cost < float("inf"):
+                    reachable.append(cid)
+            available = reachable
+
+            if not available:
+                break
+
             def score(cid):
                 c = checks[cid]
                 travel_secs = dist_from_current.get(c.scene, float("inf"))
 
                 # Also check SOS options
                 if has_sos and activated_owls:
-                    sos_cost, _ = _best_sos(current, c.scene, activated_owls, world, acquired_frozen)
+                    sos_cost, _ = _best_sos(
+                        current, c.scene, activated_owls, world, acquired_frozen
+                    )
                     travel_secs = min(travel_secs, sos_cost)
 
                 if c.time is not None:
@@ -172,7 +198,9 @@ def _solve_route_cycles(
                 earliest_valid = min(t for t in best.time if t >= current_time)
                 current_time = earliest_valid
 
-            travel_secs, path, _ = _travel(current, best.scene, has_sos, activated_owls, world, acquired_frozen)
+            travel_secs, path, _ = _travel(
+                current, best.scene, has_sos, activated_owls, world, acquired_frozen
+            )
             total_secs = travel_secs + best.duration
 
             cycle.add(best, total_secs, path)
