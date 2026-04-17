@@ -6,9 +6,8 @@ owl activation tracking, and automatic SOS A/B testing.
 
 from __future__ import annotations
 from collections import deque
-from core import GameGraph, Check, Strat, Ruleset
+from core import GameGraph, Check, Strat, Ruleset, SOS_COST
 from enums import Scene, Masks, Songs, TimeSlot
-from world import SOS_COST
 
 
 def _find_needed(

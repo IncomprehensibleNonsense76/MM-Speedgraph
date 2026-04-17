@@ -19,6 +19,13 @@ import heapq
 # =============================================================================
 
 
+# =============================================================================
+# Constants
+# =============================================================================
+
+SOS_COST = 15  # seconds for Song of Soaring warp
+
+
 class Ruleset(IntEnum):
     """Speedrun category rulesets, ordered from most restrictive to least.
     Each level includes all strats from levels below it."""

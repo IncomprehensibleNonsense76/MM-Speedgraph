@@ -1,7 +1,11 @@
 """Game graph builder — assembles the full MM world from region modules.
 
-Each module in this package has a register(graph) function that adds
-its nodes, checks, and traversal strats to the GameGraph.
+Region modules match the kz warp menu categories:
+  clock_town, swamp, snowhead, great_bay, ikana,
+  overworld, milk_road, moon, other
+
+Each module has a register(graph) function that adds its nodes,
+checks, and traversal strats to the GameGraph.
 """
 
 from __future__ import annotations
@@ -16,30 +20,32 @@ def build(
     """Build the complete game graph with all regions and dungeons."""
     graph = GameGraph(ruleset=ruleset, version=version, platform=platform)
 
-    # Register overworld regions
+    # Regions (kz warp menu order)
     from graph import clock_town
-    from graph import southern_swamp
-    from graph import mountain
+    from graph import swamp
+    from graph import snowhead
     from graph import great_bay
-    from graph import milk_road
     from graph import ikana
     from graph import overworld
+    from graph import milk_road
     from graph import moon
-
-    from graph import kafei_quest, upgrades
 
     clock_town.register(graph)
     overworld.register(graph)
-    southern_swamp.register(graph)
-    mountain.register(graph)
+    swamp.register(graph)
+    snowhead.register(graph)
     milk_road.register(graph)
     great_bay.register(graph)
     ikana.register(graph)
     moon.register(graph)
+
+    # Cross-region quests and upgrades
+    from graph import kafei_quest, upgrades
+
     kafei_quest.register(graph)
     upgrades.register(graph)
 
-    # Register dungeons
+    # Dungeons
     from graph.dungeons import wft, sht, gbt, stt
 
     wft.register(graph)
