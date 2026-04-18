@@ -2,7 +2,7 @@
 
 Region modules match the kz warp menu categories:
   clock_town, swamp, snowhead, great_bay, ikana,
-  overworld, milk_road, moon, other
+  overworld, milk_road, moon
 
 Each module has a register(graph) function that adds its nodes,
 checks, and traversal strats to the GameGraph.
@@ -21,33 +21,26 @@ def build(
     graph = GameGraph(ruleset=ruleset, version=version, platform=platform)
 
     # Regions (kz warp menu order)
-    from graph import clock_town
-    from graph import swamp
-    from graph import snowhead
-    from graph import great_bay
-    from graph import ikana
-    from graph import overworld
-    from graph import milk_road
-    from graph import moon
+    from clock_town import register as reg_ct
+    from swamp import register as reg_swamp
+    from snowhead import register as reg_snowhead
+    from great_bay import register as reg_gb
+    from ikana import register as reg_ikana
+    from overworld import register as reg_ow
+    from milk_road import register as reg_mr
+    from moon import register as reg_moon
 
-    clock_town.register(graph)
-    overworld.register(graph)
-    swamp.register(graph)
-    snowhead.register(graph)
-    milk_road.register(graph)
-    great_bay.register(graph)
-    ikana.register(graph)
-    moon.register(graph)
-
-    # Cross-region quests and upgrades
-    from graph import kafei_quest, upgrades
-
-    kafei_quest.register(graph)
-    upgrades.register(graph)
+    reg_ct(graph)
+    reg_ow(graph)
+    reg_swamp(graph)
+    reg_snowhead(graph)
+    reg_mr(graph)
+    reg_gb(graph)
+    reg_ikana(graph)
+    reg_moon(graph)
 
     # Dungeons
-    from graph.dungeons import wft, sht, gbt, stt
-
+    from dungeons import wft, sht, gbt, stt
     wft.register(graph)
     sht.register(graph)
     gbt.register(graph)

@@ -8,7 +8,7 @@ Goals: any%, bottles, masks
 
 from __future__ import annotations
 import sys
-from graph import build
+from __init__ import build
 from core import Ruleset, Version, Platform
 from enums import Events, Items, Masks
 from route_solver import solve, print_route
