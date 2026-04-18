@@ -1,0 +1,555 @@
+MM Scenes — kz Warp Menu
+============================================================
+
+CLOCK TOWN (18 scenes)
+--------------------------------------------------
+  [101] south clock town
+           -> clock tower interior
+           -> termina field
+           -> east clock town (upper)
+           -> west clock town (upper)
+           -> north clock town
+           -> west clock town (lower)
+           -> laundry pool
+           -> east clock town (lower)
+           -> clock tower
+           -> owl statue
+           -> clock tower (after song of time)
+  [100] north clock town
+           -> termina field
+           -> east clock town
+           -> south clock town
+           -> fairy fountain
+           -> deku playground
+           -> bombers code
+           -> after bomberrs
+           -> after sakon
+  [ 99] west clock town
+           -> termina field
+           -> south clock town (lower)
+           -> south clock town (upper)
+           -> swordsman school
+           -> curiosity shop
+           -> trading post
+           -> bomb shop
+           -> post office
+           -> lottery shop
+           -> termina field
+  [ 98] east clock town
+           -> termina field
+           -> south clock town
+           -> observatory
+           -> south clock town
+           -> treasure chest shop
+           -> north clock town
+           -> honey & darling
+           -> mayor's residence
+           -> shooting gallery
+           -> stock pot inn (main)
+           -> stock pot inn (upper)
+           -> milk bar
+  [102] laundry pool
+           -> south clock town
+           -> kafei's hideout
+  [ 22] deku playground
+           -> north clock town
+           -> after game
+  [ 94] bomb shop
+           -> west clock town
+           -> west clock town
+  [  7] curiosity shop
+           -> west clock town
+           -> kafei's hideout
+           -> spying start
+           -> spying end
+  [ 43] trading post
+           -> west clock town (intro)
+           -> west clock town (no intro)
+  [ 38] post office
+           -> west clock town
+  [ 48] lottery shop
+           -> west clock town
+  [  0] mayor's residence
+           -> z2.h
+           -> mayor's residence
+           -> east clock town
+           -> after couples mask
+  [  4] honey & darling
+           -> east clock town
+  [ 13] milk bar
+           -> east clock town
+  [ 15] treasure chest shop
+           -> east clock town
+           -> after game
+  [ 24] town shooting gallery
+           -> east clock town (intro)
+           -> east clock town (no intro)
+  [ 74] swordsman school
+           -> west clock town
+  [ 87] stock pot inn
+           -> east clock town (main)
+           -> east clock town (balcony)
+           -> granny's story
+           -> anju meeting
+           -> eavesdropping anju
+           -> after eavesdropping
+
+SWAMP (14 scenes)
+--------------------------------------------------
+  [ 54] road to southern swamp
+           -> termina field
+           -> southern swamp
+           -> swamp shooting gallery
+  [ 28] swamp shooting gallery
+           -> road to southern swamp
+  [ 59] southern swamp (poison)
+           -> road to southern swamp
+           -> boat house
+           -> woodfall
+           -> deku palace
+           -> deku palace (shortcut)
+           -> hags potion shop
+           -> boat ride
+           -> woods of mystery
+           -> swamp spider house
+           -> ikana canyon
+           -> owl statue
+  [  6] southern swamp (clear)
+           -> swamp road
+           -> boat house
+           -> woodfall
+           -> lower deku palace
+           -> upper deku palace
+           -> hags potion shop
+           -> boat cruise
+           -> woods of mystery
+           -> swamp spider house
+           -> ikana canyon
+           -> owl statue
+  [ 77] boat house
+           -> southern swamp
+           -> koume
+           -> tingle's dad
+  [  2] hags potion shop
+           -> southern swamp
+  [ 90] woods of mystery
+           -> southern swamp
+  [ 31] swamp spider house
+           -> southern swamp
+  [ 35] deku palace
+           -> southern swamp
+           -> thrown out
+           -> deku king chamber
+           -> deku king chamber (upper)
+           -> deku shrine
+           -> southern swamp (shortcut)
+           -> jp grotto left, first room
+           -> jp grotto left, second room
+           -> jp grotto right, second room
+           -> bean seller
+           -> jp grotto right, first room
+  [ 52] deku king's chamber
+           -> deku palace
+           -> deku palace (upper)
+           -> monkey released
+           -> front of king
+  [ 72] deku shrine
+           -> deku palace
+           -> deku palace
+  [ 60] woodfall
+           -> southern swamp
+           -> fairy fountain
+           -> owl statue
+  [ 19] woodfall temple
+           -> main entrance
+           -> prison after odolwa
+           -> deku princess room
+  [ 23] odolwa
+           -> woodfall temple
+
+SNOWHEAD (16 scenes)
+--------------------------------------------------
+  [ 20] path to mountain village
+           -> termina field
+           -> mountain village
+  [ 70] mountain village (winter)
+           -> after snowhead
+           -> mountain smithy
+           -> path to goron village (winter)
+           -> goron graveyard
+           -> path to snowhead
+           -> on ice
+           -> path to mountain village
+           -> owl statue
+  [ 80] mountain village (spring)
+           -> after snowhead
+           -> mountain smithy
+           -> path to goron village (spring)
+           -> goron graveyard
+           -> path to snowhead
+           -> behind waterfall
+           -> path to mountain village
+           -> after snowhead (cutscene)
+           -> owl statue
+  [ 36] mountain smithy
+           -> mountain village
+  [ 68] goron graveyard
+           -> mountain village
+           -> receiving goron mask
+  [ 83] path to goron village (winter)
+           -> mountain village (winter)
+           -> goron village (winter)
+           -> goron racetrack
+  [ 84] path to goron village (spring)
+           -> mountain village (spring)
+           -> goron village (spring)
+           -> goron racetrack
+  [ 97] goron racetrack
+           -> path to mountain village
+           -> race start
+           -> race end
+  [ 67] goron village (winter)
+           -> path to goron village (winter)
+           -> deku flower
+           -> goron shrine
+           -> lens of truth
+           -> void out
+  [ 62] goron village (spring)
+           -> path to goron village (spring)
+           -> goron shrine
+           -> lens of truth
+           -> void out
+  [ 41] goron shrine
+           -> goron village
+           -> goron shop
+           -> after lullaby
+           -> goron village (no intro)
+  [ 51] goron shop
+           -> goron shrine
+  [ 81] path to snowhead
+           -> mountain village
+           -> snowhead
+  [ 82] snowhead
+           -> path to snowhead
+           -> snowhead temple
+           -> fairy fountain
+           -> owl statue
+  [ 25] snowhead temple
+           -> snowhead (intro)
+           -> snowhead (no intro)
+  [ 58] goht
+           -> snowhead temple
+
+GREAT BAY (14 scenes)
+--------------------------------------------------
+  [ 46] great bay coast
+           -> termina field
+           -> zora cape
+           -> void respawn
+           -> pinnacle rock
+           -> fisherman hut
+           -> pirates fortress
+           -> void resapwn (murky water)
+           -> marine lab
+           -> oceanside spider house
+           -> during zora mask
+           -> after zora mask
+           -> owl statue
+           -> thrown out
+           -> after jumping game
+  [ 39] marine lab
+           -> great bay coast
+  [ 32] oceanside spider house
+           -> great bay coast
+  [ 50] fisherman's hut
+           -> great bay coast
+  [ 29] pinnacle rock
+           -> great bay coast
+           -> void respawn
+  [ 12] pirates fortress
+           -> exterior pirates fortress
+           -> lower hookshot room
+           -> upper hookshot room
+           -> silver rupee room
+           -> silver rupee room exit
+           -> barrel room
+           -> barrel room exit
+           -> twin barrel room
+           -> twin barrel room exit
+           -> oob near twin barrel
+           -> telescope
+           -> oob hookshot room
+           -> balcony
+           -> upper hookshot room
+  [ 49] pirates fortress exterior
+           -> great bay coast
+           -> pirates fortress
+           -> underwater passage
+           -> underwater jet
+           -> kicked out
+           -> hookshot platform
+           -> passage door
+  [ 27] pirates fortress interior
+           -> hookshot room
+           -> hookshot room upper
+           -> 100 rupee room
+           -> 100 rupee room (egg)
+           -> barrel room
+           -> barrel room (egg)
+           -> twin barrel room
+           -> twin barrel room (egg)
+           -> telescope
+           -> outside, underwater
+           -> outside, telescope
+  [ 47] zora cape
+           -> great bay coast
+           -> zora hall
+           -> zora hall (turtle)
+           -> void respawn
+           -> waterfall
+           -> fairy fountain
+           -> owl statue
+           -> great bay temple
+           -> after great bay temple
+  [ 64] waterfall
+           -> zora cape
+           -> race start
+           -> race end
+           -> game won
+  [ 42] zora hall
+           -> zora cape
+           -> zora cape (turtle)
+           -> zora shop
+           -> lulu's room
+           -> evan's room
+           -> japa's room
+           -> mikau & tijo's room
+           -> stage
+           -> after rehearsal
+  [ 66] zora hall rooms
+           -> mikau from zora hall
+           -> japas from zora hall
+           -> lulu from zora hall
+           -> evan from zora hall
+           -> japa after jam session
+           -> zora shop from zora hall
+           -> evan after composing song
+  [ 63] great bay temple
+           -> zora cape (waving)
+           -> zora cape
+  [ 85] gyorg
+           -> great bay temple
+           -> falling cutscene
+
+IKANA (17 scenes)
+--------------------------------------------------
+  [ 73] road to ikana
+           -> termina field
+           -> ikana canyon
+           -> ikana graveyard
+  [ 57] ikana graveyard
+           -> road to ikana
+           -> grave 1
+           -> grave 2
+           -> grave 3
+           -> dampe's house
+           -> after keeta defeated
+  [  5] beneath graveyard
+           -> day 2 start
+           -> day 1 start
+  [ 40] dampes house
+           -> beneath the graveyard
+           -> graveyard
+  [ 11] ikana canyon
+           -> ikana road
+           -> ghost hut
+           -> music box house
+           -> stone tower
+           -> owl statue
+           -> beneath the well
+           -> sakon's hideout
+           -> after stone tower
+           -> ikana castle
+           -> after house opens
+           -> song of storms cave (house open)
+           -> fairy fountain
+           -> secret shrine
+           -> from song of storms cave
+           -> song of storms cave (house closed) 
+  [ 69] sakon's hideout
+           -> ikana canyon
+  [ 86] secret shrine
+           -> ikana canyon
+  [ 71] ghost hut
+           -> ikana canyon
+           -> after minigame
+           -> beat minigame
+  [ 75] music box house
+           -> ikana canyon
+  [ 65] beneath the well
+           -> ikana canyon
+           -> ikana castle
+  [ 21] ikana castle
+           -> beneath the well
+           -> ikana canyon
+           -> exterior from interior
+           -> interior from exterior
+           -> powder keg hole
+           -> block hole
+           -> throne room
+  [ 76] igos du ikana
+           -> ikana castle
+  [ 78] stone tower
+           -> ikana canyon
+           -> stone tower temple
+           -> owl statue
+  [ 79] stone tower (inverted)
+           -> after inverting
+           -> stone tower temple
+  [ 14] stone tower temple
+           -> intro
+           -> no intro
+  [ 16] stone tower temple (inverted)
+           -> main entrance
+           -> boss room entrance
+  [ 45] twinmold
+           -> inverted stone tower
+           -> inverted stone tower
+
+OVERWORLD (4 scenes)
+--------------------------------------------------
+  [ 37] termina field
+           -> west clock town
+           -> road to southern swamp
+           -> great bay coast
+           -> path to mountain village
+           -> road to ikana
+           -> milk road
+           -> south clock town
+           -> east clock town
+           -> north clock town
+           -> observatory
+           -> observatory (telescope)
+           -> near ikana
+           -> cremia hug
+           -> skullkid cutscene
+           -> west clock town
+  [ 33] observatory
+           -> east clock town
+           -> termina field
+           -> after telescope
+  [  9] grottos
+           -> ocean gossip stones
+           -> swamp gossip stones
+           -> canyon gossip stones
+           -> mountain gossip stones
+           -> generic grotto
+           -> hot spring
+           -> maze straight (a)
+           -> dodongo
+           -> maze vines (lower)
+           -> business scrub
+           -> cows
+           -> ocean heart piece
+           -> magic bean seller
+           -> peahat
+           -> maze straight (b)
+           -> maze grotto (upper)
+           -> lens of truth
+  [ 30] fairy fountain
+           -> clock town
+           -> woodfall
+           -> snowhead
+           -> zora cape
+           -> ikana canyon
+           -> after magic
+           -> after spin attack
+           -> after double magic
+           -> after double defense
+           -> after great fairy sword
+
+MILK ROAD (6 scenes)
+--------------------------------------------------
+  [ 26] milk road
+           -> termina field
+           -> romani ranch
+           -> gorman track (track exit)
+           -> gorman track (main exit)
+           -> owl statue
+  [ 96] gorman race track
+           -> milk road
+           -> beat minigame
+           -> milk road behind fence
+           -> milk road fence cutscene
+           -> start minigame
+  [ 44] romani ranch
+           -> milk road
+           -> after target practice
+           -> barn
+           -> house
+           -> cucco shack
+           -> doggy racetrack
+           -> after aliens
+           -> after romani leaves
+           -> failing cremia game
+           -> failing aliens
+           -> after aliens intro
+           -> leaving with cremia
+  [  3] romani ranch buildings
+           -> barn from ranch
+           -> house from ranch
+  [ 55] doggy racetrack
+           -> romani ranch
+           -> after race
+  [ 56] cucco shack
+           -> romani ranch
+           -> after bunny hood
+
+MOON (6 scenes)
+--------------------------------------------------
+  [ 93] moon
+           -> clock tower
+  [ 34] deku trial
+           -> moon
+  [ 53] goron trial
+           -> moon
+  [ 61] zora trial
+           -> moon
+           -> void respawn
+  [ 92] link trial
+           -> moon
+  [  1] majora's lair
+           -> moon
+
+OTHER (7 scenes)
+--------------------------------------------------
+  [ 91] lost woods
+           -> kicked off epona
+           -> song of time cutscene
+  [ 18] before clock town
+           -> falling from cliff
+           -> inside clock tower
+           -> transformed to deku
+           -> void respawn
+           -> song of time flashback
+  [ 17] clock tower
+           -> first encounter
+           -> after song of time
+  [ 89] clock tower interior
+           -> twisted hallway
+           -> south clock town
+           -> deku mask cutscene
+           -> song of time
+           -> twisted hallway
+           -> majora's mask cutscene
+  [ 95] giants chamber
+           -> oath to order
+  [ 88] great bay (cutscene)
+           -> zora cape
+  [ 10] cutscene map
+
+BETA (1 scenes)
+--------------------------------------------------
+  [  8] test map
+
+Total: 103 scenes across 10 categories
