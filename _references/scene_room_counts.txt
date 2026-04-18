@@ -1,0 +1,109 @@
+MM Scene Room Counts (from decomp XML)
+============================================================
+
+Scene                               English                        Rooms
+------------------------------------------------------------------------
+Z2_SEA                              Great Bay Temple                  16
+KAKUSIANA                           Grottos / Lone Peak Shrine        15
+Z2_PIRATE                           Pirates Fortress Interior         15
+Z2_HAKUGIN                          Snowhead Temple                   14
+Z2_REDEAD                           Beneath the Well                  14
+Z2_MITURIN                          Woodfall Temple                   13
+Z2_INISIE_N                         Stone Tower Temple                12
+Z2_INISIE_R                         Stone Tower Temple (Inverted)     12
+Z2_CASTLE                           Ancient Castle of Ikana           10
+Z2_26SARUNOMORI                     Woods of Mystery                   9
+Z2_DANPEI                           Deku Shrine                        9
+Z2_LAST_LINK                        Moon Link Trial                    8
+Z2_KINDAN2                          Ocean Spider House                 6
+Z2_KINSTA1                          Swamp Spider House                 6
+Z2_RANDOM                           Beneath Graveyard                  6
+Z2_BANDROOM                         Zora Hall Rooms                    5
+Z2_HAKASHITA                                                           5
+Z2_IKANA                            Ikana Canyon                       5
+Z2_YADOYA                           Stock Pot Inn                      5
+Z2_YOUSEI_IZUMI                     Great Fairy Fountains              5
+Z2_SONCHONOIE                                                          4
+Z2_20SICHITAI                       Southern Swamp (Poison)            3
+Z2_20SICHITAI2                      Southern Swamp (Clear)             3
+Z2_22DEKUCITY                       Deku Palace                        3
+Z2_LOST_WOODS                       Lost Woods                         3
+Z2_OMOYA                            Romani Ranch Buildings             3
+Z2_10YUKIYAMANOMURA2                                                   2
+Z2_11GORONNOSATO                                                       2
+Z2_11GORONNOSATO2                                                      2
+Z2_16GORON_HOUSE                                                       2
+Z2_AYASHIISHOP                                                         2
+Z2_BOTI                             Ikana Graveyard                    2
+Z2_DANPEI2TEST                                                         2
+Z2_IKNINSIDE                        Igos du Ikana                      2
+Z2_INSIDETOWER                                                         2
+Z2_LAST_DEKU                        Moon Deku Trial                    2
+Z2_LAST_GORON                       Moon Goron Trial                   2
+Z2_OPENINGDAN                                                          2
+Z2_SECOM                            Sakons Hideout                     2
+Z2_TENMON_DAI                       Observatory                        2
+SPOT00                              Before Clock Town                  1
+Z2_00KEIKOKU                        Termina Field                      1
+Z2_10YUKIYAMANOMURA                                                    1
+Z2_12HAKUGINMAE                                                        1
+Z2_13HUBUKINOMITI                                                      1
+Z2_14YUKIDAMANOMITI                                                    1
+Z2_17SETUGEN                                                           1
+Z2_17SETUGEN2                                                          1
+Z2_21MITURINMAE                     Woodfall                           1
+Z2_24KEMONOMITI                                                        1
+Z2_30GYOSON                         Zora Cape                          1
+Z2_31MISAKI                         Pinnacle Rock                      1
+Z2_33ZORACITY                       Zora Hall                          1
+Z2_35TAKI                                                              1
+Z2_8ITEMSHOP                        Trading Post                       1
+Z2_ALLEY                            Laundry Pool                       1
+Z2_BACKTOWN                         North Clock Town                   1
+Z2_BOMYA                                                               1
+Z2_BOWLING                                                             1
+Z2_CLOCKTOWER                       Clock Tower                        1
+Z2_DEKUTES                                                             1
+Z2_DEKU_KING                                                           1
+Z2_DOUJOU                                                              1
+Z2_F01                              Moon                               1
+Z2_F01C                                                                1
+Z2_F01_B                                                               1
+Z2_F40                                                                 1
+Z2_F41                                                                 1
+Z2_FISHERMAN                                                           1
+Z2_GORONRACE                                                           1
+Z2_GORONSHOP                                                           1
+Z2_GORON_HAKA                                                          1
+Z2_HAKUGIN_BS                       Gohts Lair                         1
+Z2_ICHIBA                                                              1
+Z2_IKANAMAE                                                            1
+Z2_INISIE_BS                        Twinmolds Lair                     1
+Z2_KAIZOKU                          Pirates Fortress                   1
+Z2_KAJIYA                           Mountain Smithy                    1
+Z2_KOEPONARACE                                                         1
+Z2_KONPEKI_ENT                      Great Bay Coast                    1
+Z2_KYOJINNOMA                                                          1
+Z2_LABO                             Marine Research Lab                1
+Z2_LAST_BS                          Majoras Lair                       1
+Z2_LAST_ZORA                        Moon Zora Trial                    1
+Z2_MAP_SHOP                                                            1
+Z2_MILK_BAR                                                            1
+Z2_MITURIN_BS                       Odolwas Lair                       1
+Z2_MUSICHOUSE                                                          1
+Z2_OKUJOU                                                              1
+Z2_POSTHOUSE                                                           1
+Z2_ROMANYMAE                                                           1
+Z2_SEA_BS                           Gyorgs Lair                        1
+Z2_SINKAI                           Fishermans Hut                     1
+Z2_SOUGEN                           Cutscene Map                       1
+Z2_SYATEKI_MIZU                                                        1
+Z2_SYATEKI_MORI                                                        1
+Z2_TAKARAKUJI                                                          1
+Z2_TAKARAYA                                                            1
+Z2_TORIDE                           Pirates Fortress Exterior          1
+Z2_TOUGITES                                                            1
+Z2_TOWN                             South Clock Town                   1
+Z2_WITCH_SHOP                                                          1
+
+Total: 102 scenes
